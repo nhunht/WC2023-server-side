@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
-const url = "mongodb://127.0.0.1:27017/wc2023";
+const url = "mongodb+srv://nhtn0311:trucnhubt@cluster0.mt8galh.mongodb.net/wc2023?retryWrites=true&w=majority";
 const connect = mongoose.connect(url);
 
 connect.then(() => {
