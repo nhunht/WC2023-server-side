@@ -51,7 +51,10 @@ class UserController {
         _id: req.params.userId,
       },
       req.body
-    ).catch(next);
+    )
+      // send status code back to the client
+      .then(() => res.sendStatus(204))
+      .catch(next);
   }
 }
 module.exports = new UserController();

@@ -80,7 +80,9 @@ class PlayerController {
         _id: req.params.playerId,
       },
       req.body
-    ).catch(next);
+    )
+      .then(() => res.sendStatus(204))
+      .catch(next);
   }
 
   delete(req, res, next) {
@@ -89,7 +91,9 @@ class PlayerController {
         _id: req.params.playerId,
       },
       req.body
-    ).catch(next);
+    )
+      .then(() => res.sendStatus(204))
+      .catch(next);
   }
 }
 module.exports = new PlayerController();

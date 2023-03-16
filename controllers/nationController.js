@@ -60,7 +60,9 @@ class NationController {
         _id: req.params.nationId,
       },
       req.body
-    ).catch(next);
+    )
+      .then(() => res.sendStatus(204))
+      .catch(next);
   }
 
   delete(req, res, next) {
@@ -69,7 +71,9 @@ class NationController {
         _id: req.params.nationId,
       },
       req.body
-    ).catch(next);
+    )
+      .then(() => res.sendStatus(204))
+      .catch(next);
   }
 }
 module.exports = new NationController();
