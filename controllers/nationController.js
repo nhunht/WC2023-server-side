@@ -6,24 +6,23 @@ class NationController {
   async index(req, res, next) {
     let pageSize = req.query.pageSize || 6;
     let pageIndex = req.query.pageIndex || 1;
-    let count = await Nations.countDocuments({});
-
-    Nations.find()
+    let search = req.query.search || "";
+    let count = await Nations.countDocuments({ name: { $regex: search } });
+    let nations = await Nations.find({ name: { $regex: search } })
+      .sort({ createdAt: 1 })
       .skip((pageIndex - 1) * pageSize)
-      .limit(pageSize)
-      .then((nations) => {
-        res.send(
-          JSON.stringify({
-            title: "Nations",
-            nations: nations,
-            pageIndex: pageIndex,
-            totalPages: Math.ceil(count / pageSize),
-            // button: req.isAuthenticated() ? "Logout" : "Login",
-            // isAdmin: req.user.isAdmin ? "" : "hidden",
-          })
-        );
+      .limit(pageSize);
+
+    res.send(
+      JSON.stringify({
+        title: "Nations",
+        pageIndex: pageIndex,
+        totalPages: Math.ceil(count / pageSize),
+        nations: nations,
+        // button: req.isAuthenticated() ? "Logout" : "Login",
+        // isAdmin: req.user.isAdmin ? "" : "hidden",
       })
-      .catch(next);
+    );
   }
 
   create(req, res, next) {

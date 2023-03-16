@@ -28,11 +28,13 @@ class PlayerController {
   async index(req, res, next) {
     let pageSize = req.query.pageSize || 6;
     let pageIndex = req.query.pageIndex || 1;
-    var players = await Players.find()
+    let search = req.query.search || "";
+    let count = await Players.countDocuments({ name: { $regex: search } });
+    let players = await Players.find({ name: { $regex: search } })
+      .sort({ createdAt: 1 })
       .skip((pageIndex - 1) * pageSize)
       .limit(pageSize);
-    var nations = await Nations.find();
-    let count = await Players.countDocuments({});
+    let nations = await Nations.find();
 
     res.send(
       JSON.stringify({
