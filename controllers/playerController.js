@@ -80,11 +80,7 @@ class PlayerController {
         _id: req.params.playerId,
       },
       req.body
-    )
-      .then(() => {
-        res.redirect("/players");
-      })
-      .catch(next);
+    ).catch(next);
   }
 
   delete(req, res, next) {
@@ -93,11 +89,7 @@ class PlayerController {
         _id: req.params.playerId,
       },
       req.body
-    )
-      .then(() => {
-        res.redirect("/players");
-      })
-      .catch(next);
+    ).catch(next);
   }
 }
 module.exports = new PlayerController();

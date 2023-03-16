@@ -51,11 +51,7 @@ class UserController {
         _id: req.params.userId,
       },
       req.body
-    )
-      .then(() => {
-        res.redirect("/users");
-      })
-      .catch(next);
+    ).catch(next);
   }
 }
 module.exports = new UserController();
