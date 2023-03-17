@@ -20,6 +20,9 @@ const nationSchema = new Schema({
     timestamps: true
 });
 
+// create index for name field
+nationSchema.index({ name: 'text' });
+
 var Nations = mongoose.model('nations', nationSchema);
 
 module.exports = Nations;

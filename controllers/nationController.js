@@ -6,9 +6,17 @@ class NationController {
   async index(req, res, next) {
     let pageSize = req.query.pageSize || 6;
     let pageIndex = req.query.pageIndex || 1;
-    let search = req.query.search || "";
-    let count = await Nations.countDocuments({ name: { $regex: search } });
-    let nations = await Nations.find({ name: { $regex: search } })
+    let search = req.query.search;
+    let query = {};
+
+    if (search) {
+      query = {
+        name: { $regex: search, $options: "i" },
+      };
+    }
+
+    let count = await Nations.countDocuments(query);
+    let nations = await Nations.find(query)
       .sort({ createdAt: 1 })
       .skip((pageIndex - 1) * pageSize)
       .limit(pageSize);

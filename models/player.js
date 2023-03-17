@@ -32,6 +32,10 @@ const playerSchema = new Schema({
     timestamps: true
 });
 
+// create index for name field
+playerSchema.index({ name: 'text' });
+
 var Players = mongoose.model('players', playerSchema);
+
 
 module.exports = Players;

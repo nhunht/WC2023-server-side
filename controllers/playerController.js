@@ -28,9 +28,31 @@ class PlayerController {
   async index(req, res, next) {
     let pageSize = req.query.pageSize || 6;
     let pageIndex = req.query.pageIndex || 1;
-    let search = req.query.search || "";
-    let count = await Players.countDocuments({ name: { $regex: search } });
-    let players = await Players.find({ name: { $regex: search } })
+    let search = req.query.search;
+    let query = {};
+    let count;
+
+    if (search) {
+      query = {
+        name: { $regex: search, $options: "i" },
+      };
+
+      count = await Players.countDocuments(query);
+
+      if (count === 0) {
+        query = {
+          $text: {
+            $search: search,
+            $caseSensitive: false,
+            $diacriticSensitive: false,
+          },
+        };
+
+        count = await Players.countDocuments(query);
+      }
+    }
+
+    let players = await Players.find(query)
       .sort({ createdAt: 1 })
       .skip((pageIndex - 1) * pageSize)
       .limit(pageSize);
