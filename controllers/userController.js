@@ -33,6 +33,7 @@ class UserController {
 
   formEdit(req, res, next) {
     const userId = req.params.userId;
+    
     User.findById(userId)
       .then((user) => {
         res.send(

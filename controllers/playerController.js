@@ -30,7 +30,7 @@ class PlayerController {
     let pageIndex = req.query.pageIndex || 1;
     let search = req.query.search;
     let query = {};
-    let count;
+    let count = await Players.countDocuments(query);
 
     if (search) {
       query = {
@@ -82,6 +82,7 @@ class PlayerController {
 
   formEdit(req, res, next) {
     const playerId = req.params.playerId;
+    
     Players.findById(playerId)
       .then((player) => {
         Nations.find({}).then((nations) => {

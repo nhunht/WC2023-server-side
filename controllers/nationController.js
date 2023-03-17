@@ -1,5 +1,6 @@
 const Nations = require("../models/nation");
 const isoCountries = require("i18n-iso-countries");
+const Players = require("../models/player");
 isoCountries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 
 class NationController {
@@ -62,6 +63,7 @@ class NationController {
   edit(req, res, next) {
     var code = isoCountries.getAlpha2Code(req.body.name, "en").toLowerCase();
     req.body.ensign = "https://flagcdn.com/160x120/" + code + ".png";
+
     Nations.updateOne(
       {
         _id: req.params.nationId,
@@ -72,15 +74,19 @@ class NationController {
       .catch(next);
   }
 
-  delete(req, res, next) {
-    Nations.deleteOne(
-      {
-        _id: req.params.nationId,
-      },
-      req.body
-    )
-      .then(() => res.sendStatus(204))
-      .catch(next);
+  async delete(req, res, next) {
+    if (await Players.countDocuments({ nationId: req.params.nationId }) > 0) {
+      res.sendStatus(400);
+    } else {
+      Nations.deleteOne(
+        {
+          _id: req.params.nationId,
+        },
+        req.body
+      )
+        .then(() => res.sendStatus(204))
+        .catch(next);
+    }
   }
 }
 module.exports = new NationController();
